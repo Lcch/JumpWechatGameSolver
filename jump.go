@@ -226,17 +226,18 @@ func getTopPointOfNextBlock(img [][][]uint8, pivotPoint *ColorGroup) *ColorGroup
 	return ret
 }
 
-func oneMove(_ int) {
+func oneMove(step int) {
 	img := readPng("screen.png")
 	pivotBlocks := getPivotPoints(img)
 	pivotPoint := findPivotPoint(pivotBlocks)
 	fmt.Printf("pivot %s\n", pivotPoint.toString())
 	topPoint := getTopPointOfNextBlock(img, pivotPoint)
 	fmt.Printf("topPoint %s\n", topPoint.toString())
-	makeJumpByT(math.Abs(pivotPoint.y-topPoint.y) / DEFAULT_X * DEFAULT_T)
+	makeJumpByT(math.Abs(pivotPoint.y-topPoint.y) / DEFAULT_X * DEFAULT_T + 4200.0 / math.Abs(topPoint.x - pivotPoint.x))
 	// screen shot after make a move
-	time.Sleep(2 * time.Second)
+	time.Sleep(1500 * time.Millisecond)
 	screenShot()
+	runBashCommand(fmt.Sprintf("cp screen.png %d.png", step))
 }
 
 func run() {
